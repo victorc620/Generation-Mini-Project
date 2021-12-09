@@ -1,7 +1,10 @@
 import csv
 import json
 
-prod_menu = """
+
+def main():
+
+    prod_menu = """
 ------PRODUCT MENU------
 0. Return to main menu
 1. Print product list
@@ -10,7 +13,7 @@ prod_menu = """
 4. Delete product
 """
 
-cour_menu = """
+    cour_menu = """
 ------COURIER MENU------
 0. Return to main menu
 1. Print courier list
@@ -18,9 +21,7 @@ cour_menu = """
 3. Update existing courier
 4. Delete courier 
 """
-
-def main():
-
+    
     prod_list = load_list("product.txt")
     cour_list = load_list("courier.txt")
     orders_list = load_list_of_dict("orders.txt")
