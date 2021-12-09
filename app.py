@@ -165,14 +165,14 @@ def orders_menu(orders_list, status_list, cour_list):
     """
     
     order_menu = """
-    ------ORDERS MENU------
-    0. Return to main menu
-    1. Print order dictionary
-    2. Create new order
-    3. Update existing order status
-    4. Update existing order
-    5. Delete order
-    """
+------ORDERS MENU------
+0. Return to main menu
+1. Print order dictionary
+2. Create new order
+3. Update existing order status
+4. Update existing order
+5. Delete order
+"""
         
     while True:
         print(order_menu)
