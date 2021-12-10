@@ -50,7 +50,7 @@ def print_index(name):
     for index, item in enumerate(name):
         print(index, item)
 
-def menu_input_error_detector(max_menu_index):
+def menu_input(max_menu_index):
     while True:
         try:
             action = int(input("Enter your action: "))
@@ -75,7 +75,7 @@ def main_menu():
 3. Enter order menu
 """
     print(main_menu)        
-    action = menu_input_error_detector(5)
+    action = menu_input(5)
     return action
 
 def exit_program(prod_list, cour_list, orders_list):
@@ -98,14 +98,7 @@ def item_menu(item_list: list, menu_name: str, menu_interface):
     """
     while True: #Product/Courier Menu Loop
         print(menu_interface)
-        
-        try: # Handle invalid input
-            action = int(input("Enter your action: "))
-            if action>4:
-                raise Exception
-        except Exception:
-            print("\nERROR: Please enter an valid action")
-            continue
+        action = menu_input(4)
         
         if action == 0:
             return
@@ -187,13 +180,7 @@ def orders_menu(orders_list, status_list, cour_list):
         
     while True:
         print(order_menu)
-        try:
-            action = int(input("Enter your action: "))
-            if action>5:
-                raise Exception
-        except Exception:
-            print("\nERROR: Please enter an valid action")
-            continue
+        action = menu_input(5)
         
         if action == 0:
             return
