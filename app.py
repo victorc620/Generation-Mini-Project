@@ -28,7 +28,8 @@ def main():
     status_list = ["Preparing", "Awaiting Shipment", "Shipped", "Refunded"]
     
     while True: #Main Menu Loop
-        action = main_menu()
+        action = int(main_menu())  
+        
         if action == 0:
             exit_program(prod_list, cour_list, orders_list)
         if action == 1:
