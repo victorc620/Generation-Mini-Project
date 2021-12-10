@@ -28,7 +28,7 @@ def main():
     status_list = ["Preparing", "Awaiting Shipment", "Shipped", "Refunded"]
     
     while True: #Main Menu Loop
-        action = int(main_menu())  
+        action = main_menu()
         
         if action == 0:
             exit_program(prod_list, cour_list, orders_list)
@@ -50,6 +50,17 @@ def print_index(name):
     for index, item in enumerate(name):
         print(index, item)
 
+def menu_input_error_detector(max_menu_index):
+    while True:
+        try:
+            action = int(input("Enter your action: "))
+            if action>max_menu_index:
+                raise Exception
+        except Exception:
+            print("\nERROR: Please enter an valid action")
+            continue
+        return action
+    
 def main_menu():
     """
     Enter the Main menu
@@ -63,9 +74,8 @@ def main_menu():
 2. Enter courier menu
 3. Enter order menu
 """
-    print(main_menu)
-    
-    action = int(input("Enter your action: "))
+    print(main_menu)        
+    action = menu_input_error_detector(5)
     return action
 
 def exit_program(prod_list, cour_list, orders_list):
