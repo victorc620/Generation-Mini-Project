@@ -1,2 +1,0 @@
-{"customer_name": "q", "customer_address": "q", "customer_phone_number": "q", "courier": "Ben", "status": "Shipped"}
-{"customer_name": "s", "customer_address": "s", "customer_phone_number": "s", "courier": "Victor", "status": "Preparing"}

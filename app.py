@@ -1,6 +1,7 @@
 import csv
 import json
 
+orders_csv_header = ["customer_name", "customer_address", "customer_phone", "courier", "status"]
 
 def main():
 
@@ -24,7 +25,7 @@ def main():
     
     prod_list = load_list("product.txt")
     cour_list = load_list("courier.txt")
-    orders_list = load_list_of_dict("orders.txt")
+    orders_list = load_csv_to_list_of_dict("orders.csv")
     status_list = ["Preparing", "Awaiting Shipment", "Shipped", "Refunded"]
     
     while True: #Main Menu Loop
@@ -85,7 +86,7 @@ def exit_program(prod_list, cour_list, orders_list):
     """
     export_list("product.txt",prod_list)
     export_list("courier.txt",cour_list)
-    export_list_of_dict("orders.txt", orders_list)
+    export_list_of_dict_to_csv("orders.csv", orders_list, orders_csv_header)
     print("Thanks for using me, Bye")
     exit()
 
@@ -171,7 +172,7 @@ def orders_menu(orders_list, status_list, cour_list):
     order_menu = """
 ------ORDERS MENU------
 0. Return to main menu
-1. Print order dictionary
+1. Print order list
 2. Create new order
 3. Update existing order status
 4. Update existing order
@@ -204,7 +205,7 @@ def create_new_order(orders_list,cour_list):
     orders_dict = {}
     orders_dict["customer_name"] = str(input("Input for customer name: "))
     orders_dict["customer_address"] = str(input("Input for customer address: "))
-    orders_dict["customer_phone_number"] = str(input("Input for customer phone number: "))
+    orders_dict["customer_phone"] = str(input("Input for customer phone number: "))
     print_index(cour_list)
     orders_dict["courier"] = cour_list[int(input("Input the courier index to select courier: "))]
     orders_dict["status"] = "Preparing"
@@ -259,7 +260,7 @@ def update_existing_order(orders_list, status_list, cour_list):
         
         cus_phone = str(input("Input for customer phone number: "))
         if cus_phone:
-            orders_list[new_order_index][ "customer_phone_number"] = cus_phone
+            orders_list[new_order_index][ "customer_phone"] = cus_phone
         
         print_index(cour_list)
         cour_index = input("Input the courier index to select courier: ")
@@ -286,16 +287,15 @@ def load_list(file_name: str):
             list.append(name.rstrip())
         return list
 
-def load_list_of_dict(file_name:str):
+def load_csv_to_list_of_dict(file_name:str):
     """
-    Load from orders.txt to creat a list of order(dict)
-    json is used
+    Load from orders.csv to creat a list of order(dict)
     """
     list = []
     with open(file_name, "r") as f:
-        for line in f:
-            dict_order = json.loads(line)
-            list.append(dict_order)
+        csv_file = csv.DictReader(f)
+        for line in csv_file:
+            list.append(line)
         return list
         
     
@@ -308,12 +308,16 @@ def export_list(file_name: str,list):
     except:
         print("Failed to open file")
         
-def export_list_of_dict(filename: str, list_of_dict):
-    """Export orders_list to a orders.txt file"""
+def export_list_of_dict_to_csv(filename: str, list_of_dict: list, fieldnames: list):
+    """Export orders_list to a csv file"""
     try:
         with open(filename, "w") as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            print(list_of_dict)
             for line in list_of_dict:
-                f.write(json.dumps(line)+ "\n")
+                print(line)
+                writer.writerow(line)
     except:
         print("Failed to open file")
 
