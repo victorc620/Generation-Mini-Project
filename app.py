@@ -2,7 +2,7 @@ import csv
 
 products_csv_header = ["name", "price"]
 courier_csv_header = ["name", "phone"]
-orders_csv_header = ["customer_name", "customer_address", "customer_phone", "courier", "status"]
+orders_csv_header = ["customer_name", "customer_address", "customer_phone", "courier", "status", "items"]
 
 def main():
 
@@ -51,7 +51,7 @@ def main():
             #Courier Menu
             item_menu(cour_list, "courier", cour_menu)
         if action == 3:
-            orders_menu(orders_list, status_list, cour_list)
+            orders_menu(orders_list, status_list, prod_list, cour_list)
         if action == 4:
             print(prod_list)
             print(cour_list)
@@ -79,7 +79,7 @@ def item_menu(item_list: list, menu_name: str, menu_interface):
         if action == 4:
             delect_item(item_list, menu_name)
 
-def orders_menu(orders_list, status_list, cour_list):
+def orders_menu(orders_list, status_list, prod_list, cour_list):
     """
     Enter the Orders menu
     orders_list = orders_list
@@ -106,11 +106,11 @@ def orders_menu(orders_list, status_list, cour_list):
         if action == 1:
             print(orders_list)
         if action == 2:
-            create_new_order(orders_list,cour_list)
+            create_new_order(orders_list,prod_list,cour_list)
         if action == 3:
             update_order_status(orders_list, status_list)
         if action == 4:
-            update_existing_order(orders_list, status_list, cour_list)
+            update_existing_order(orders_list, status_list, prod_list, cour_list)
         if action == 5:
             delect_item(orders_list, "order")
 
@@ -187,7 +187,7 @@ def delect_item(item_list, list_name):
         return item_list
 
 
-def create_new_order(orders_list,cour_list):
+def create_new_order(orders_list,prod_list, cour_list):
     """
     Create new order in the list of orders
     orders_list = orders_list
@@ -197,9 +197,12 @@ def create_new_order(orders_list,cour_list):
     orders_dict["customer_name"] = str(input("Input for customer name: "))
     orders_dict["customer_address"] = str(input("Input for customer address: "))
     orders_dict["customer_phone"] = str(input("Input for customer phone number: "))
+    print_index(prod_list)
+    item_index_string = str(input("Enter list of product index values (seperated with comma): "))
     print_index(cour_list)
-    orders_dict["courier"] = cour_list[int(input("Input the courier index to select courier: "))]
+    orders_dict["courier"] = int(input("Input the courier index to select courier: "))
     orders_dict["status"] = "Preparing"
+    orders_dict["items"] =  [index.strip() for index in item_index_string.split(",")]
     orders_list.append(orders_dict)
     return orders_list
 
@@ -224,7 +227,7 @@ def update_order_status(orders_list, status_list):
         orders_list[new_order_index]["status"] = status_list[index_status]
         return
 
-def update_existing_order(orders_list, status_list, cour_list):
+def update_existing_order(orders_list, status_list, prod_list, cour_list):
     """
     Update an existing order with new name
     orders_list = orders_list
@@ -252,16 +255,22 @@ def update_existing_order(orders_list, status_list, cour_list):
         cus_phone = str(input("Input for customer phone number: "))
         if cus_phone:
             orders_list[new_order_index][ "customer_phone"] = cus_phone
+            
+        print_index(prod_list)
+        item_index_string = str(input("Enter list of product index values (seperated with comma): "))
         
         print_index(cour_list)
         cour_index = input("Input the courier index to select courier: ")
         if cour_index:
-            orders_list[new_order_index]["courier"] = cour_list[int(cour_index)]
+            orders_list[new_order_index]["courier"] = int(cour_index)
         
         print_index(status_list)
         index_status = input("What is the new order status?: ")
         if index_status:
             orders_list[new_order_index]["status"] = status_list[int(index_status)] # Update status
+        
+        if item_index_string:
+            orders_list[new_order_index]["items"] = [index.strip() for index in item_index_string.split(",")]
             
         return orders_list
     
