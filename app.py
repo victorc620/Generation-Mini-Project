@@ -1,9 +1,19 @@
 import csv
-import json
 
+products_csv_header = ["name", "price"]
+courier_csv_header = ["name", "phone"]
 orders_csv_header = ["customer_name", "customer_address", "customer_phone", "courier", "status"]
 
 def main():
+
+    main_menu = """
+------MAIN MENU------
+
+0. Exit the app
+1. Enter product menu
+2. Enter courier menu
+3. Enter order menu
+"""
 
     prod_menu = """
 ------PRODUCT MENU------
@@ -23,13 +33,14 @@ def main():
 4. Delete courier 
 """
     
-    prod_list = load_list("product.txt")
-    cour_list = load_list("courier.txt")
+    prod_list = load_csv_to_list_of_dict("product.csv")
+    cour_list = load_csv_to_list_of_dict("courier.csv")
     orders_list = load_csv_to_list_of_dict("orders.csv")
     status_list = ["Preparing", "Awaiting Shipment", "Shipped", "Refunded"]
     
     while True: #Main Menu Loop
-        action = main_menu()
+        print(main_menu)        
+        action = menu_input(5)
         
         if action == 0:
             exit_program(prod_list, cour_list, orders_list)
@@ -45,50 +56,6 @@ def main():
             print(prod_list)
             print(cour_list)
             print(orders_list)
-
-def print_index(name):
-    """Print item in list with index"""
-    for index, item in enumerate(name):
-        print(index, item)
-
-def menu_input(max_menu_index):
-    while True:
-        try:
-            action = int(input("Enter your action: "))
-            if action>max_menu_index:
-                raise Exception
-        except Exception:
-            print("\nERROR: Please enter an valid action")
-            continue
-        return action
-    
-def main_menu():
-    """
-    Enter the Main menu
-    """
-    
-    main_menu = """
-------MAIN MENU------
-
-0. Exit the app
-1. Enter product menu
-2. Enter courier menu
-3. Enter order menu
-"""
-    print(main_menu)        
-    action = menu_input(5)
-    return action
-
-def exit_program(prod_list, cour_list, orders_list):
-    """
-    Export prod_list, cour_list, orders_list to txt file
-    Exit the program
-    """
-    export_list("product.txt",prod_list)
-    export_list("courier.txt",cour_list)
-    export_list_of_dict_to_csv("orders.csv", orders_list, orders_csv_header)
-    print("Thanks for using me, Bye")
-    exit()
 
 def item_menu(item_list: list, menu_name: str, menu_interface):
     """
@@ -111,55 +78,6 @@ def item_menu(item_list: list, menu_name: str, menu_interface):
             update_existing_item(item_list, menu_name)
         if action == 4:
             delect_item(item_list, menu_name)
-            
-def create_new_item(item_list, list_name):
-    """
-    Add a new product/couries to the product/courier list
-    item_list: prod_list/ cour_list
-    list_name: "product"/"courier"
-    """
-    item = input(f"Enter the {list_name} name: ")
-    item_list.append(item)
-    print(item_list)
-    return item_list
-
-def update_existing_item(item_list, list_name):
-    """
-    Update an existing product/courier with new name
-    item_list: prod_list/ cour_list
-    list_name: "product"/"courier"
-    """
-    while True:
-        print_index(item_list)
-        try:
-            new__index = int(input(f"Enter the index of the {list_name} to be updated: "))
-            if new__index > (len(item_list)-1):
-                raise Exception
-        except Exception:
-            print("\nERROR: Please enter an valid action!\n")
-            continue
-        
-        new_item_name = input(f"Enter the name of the new {list_name}: ")
-        item_list[new__index] = new_item_name
-        print(item_list)
-        return item_list
-    
-def delect_item(item_list, list_name):
-    """
-    Delete an existing item from the list
-    item_list: prod_list/ cour_list
-    list_name: "product"/"courier"
-    """
-    print_index(item_list)
-    while True:
-        try: 
-            item_index = int(input(f"Enter the index of the {list_name} to be deleted: "))
-        except Exception:
-            print("\nERROR: Please enter an valid action!\n")
-            continue
-        item_list.pop(item_index)
-        print(item_list)
-        return item_list
 
 def orders_menu(orders_list, status_list, cour_list):
     """
@@ -195,6 +113,79 @@ def orders_menu(orders_list, status_list, cour_list):
             update_existing_order(orders_list, status_list, cour_list)
         if action == 5:
             delect_item(orders_list, "order")
+
+
+def exit_program(prod_list, cour_list, orders_list):
+    """
+    Export prod_list, cour_list, orders_list to csv file
+    Exit the program
+    """
+    export_list_of_dict_to_csv("product.csv",prod_list, products_csv_header)
+    export_list_of_dict_to_csv("courier.csv",cour_list, courier_csv_header)
+    export_list_of_dict_to_csv("orders.csv", orders_list, orders_csv_header)
+    print("Thanks for using me, Bye")
+    exit()
+
+            
+def create_new_item(item_list, list_name):
+    """
+    Add a new product/couries to the product/courier list
+    item_list: prod_list/ cour_list
+    list_key_1: "product"/"courier"
+    """
+    item = {}
+    item["name"] = input(f"Enter the {list_name} name: ")
+    if list_name == "product":
+        item["price"] = float(input(f"Enter the price: "))
+    if list_name == "courier":
+        item["phone"] = int(input(f"Enter the phone: "))
+    
+    item_list.append(item)
+    print(item_list)
+    return item_list
+
+def update_existing_item(item_list, list_name):
+    """
+    Update an existing product/courier with new name
+    item_list: prod_list/ cour_list
+    list_name: "product"/"courier"
+    """
+    while True:
+        print_index(item_list)
+        try:
+            new__index = int(input(f"Enter the index of the {list_name} to be updated: "))
+            if new__index > (len(item_list)-1):
+                raise Exception
+        except Exception:
+            print("\nERROR: Please enter an valid action!\n")
+            continue
+        
+        new_item_name = input(f"Enter the name of the new {list_name}: ")
+        item_list[new__index]["name"] = new_item_name
+        if list_name == "product":
+            item_list[new__index]["price"] = float(input(f"Enter the new price: "))
+        if list_name == "courier":
+            item_list[new__index]["phone"] = int(input(f"Enter the new phone: "))            
+        print(item_list)
+        return item_list
+    
+def delect_item(item_list, list_name):
+    """
+    Delete an existing item from the list
+    item_list: prod_list/ cour_list
+    list_name: "product"/"courier"
+    """
+    print_index(item_list)
+    while True:
+        try: 
+            item_index = int(input(f"Enter the index of the {list_name} to be deleted: "))
+        except Exception:
+            print("\nERROR: Please enter an valid action!\n")
+            continue
+        item_list.pop(item_index)
+        print(item_list)
+        return item_list
+
 
 def create_new_order(orders_list,cour_list):
     """
@@ -278,15 +269,23 @@ def update_order_property(index, key, value, orders_list): #Check wether value i
         if value:
             orders_list[index][key] = value
             
-# I/O function
-def load_list(file_name: str):
-    """Load from product/courier.txt to creat a list of product from file"""
-    with open(file_name, "r") as f:
-        list = []
-        for name in f:
-            list.append(name.rstrip())
-        return list
+def print_index(name):
+    """Print item in list with index"""
+    for index, item in enumerate(name):
+        print(index, item)
 
+def menu_input(max_menu_index):
+    while True:
+        try:
+            action = int(input("Enter your action: "))
+            if action>max_menu_index:
+                raise Exception
+        except Exception:
+            print("\nERROR: Please enter an valid action")
+            continue
+        return action
+    
+# I/O function
 def load_csv_to_list_of_dict(file_name:str):
     """
     Load from orders.csv to creat a list of order(dict)
@@ -298,25 +297,13 @@ def load_csv_to_list_of_dict(file_name:str):
             list.append(line)
         return list
         
-    
-def export_list(file_name: str,list):
-    """Export product/courier list to a product/courier.txt file"""
-    try:
-        with open(file_name, "w") as f:
-            for item in list:
-                f.write(item + "\n")
-    except:
-        print("Failed to open file")
-        
 def export_list_of_dict_to_csv(filename: str, list_of_dict: list, fieldnames: list):
     """Export orders_list to a csv file"""
     try:
         with open(filename, "w") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
-            print(list_of_dict)
             for line in list_of_dict:
-                print(line)
                 writer.writerow(line)
     except:
         print("Failed to open file")
