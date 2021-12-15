@@ -113,6 +113,10 @@ def orders_menu(orders_list, status_list, prod_list, cour_list):
             update_existing_order(orders_list, status_list, prod_list, cour_list)
         if action == 5:
             delect_item(orders_list, "order")
+# TODO
+# BONUS: lists orders by status or courier
+        # if action == 6:
+            # list orders by status or courier
 
 
 def exit_program(prod_list, cour_list, orders_list):
