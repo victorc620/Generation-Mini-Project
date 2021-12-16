@@ -1,3 +1,4 @@
 customer_name,customer_address,customer_phone,courier,status,items
 Victor,UK,99999,0,Awaiting Shipment,"['0', '1']"
-Matther,UK,777777,1,Shipped,"['0', '1']"
+Matther,UK,777777,2,Shipped,"['0', '1']"
+Cherrie,UK,456456,1,Preparing,"['0', '1', '2', '3']"
