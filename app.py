@@ -105,7 +105,7 @@ def orders_menu(orders_list, status_list, prod_list, cour_list):
         
         if action == 0:
             return
-        if action == 1:
+        if action == 1: #elif
             print(orders_list)
         if action == 2:
             create_new_order(orders_list,prod_list,cour_list)
