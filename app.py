@@ -95,11 +95,13 @@ def orders_menu(orders_list, status_list, prod_list, cour_list):
 3. Update existing order status
 4. Update existing order
 5. Delete order
+6. List orders by status
+7. List orders by courier
 """
         
     while True:
         print(order_menu)
-        action = menu_input(5)
+        action = menu_input(7)
         
         if action == 0:
             return
@@ -113,11 +115,24 @@ def orders_menu(orders_list, status_list, prod_list, cour_list):
             update_existing_order(orders_list, status_list, prod_list, cour_list)
         if action == 5:
             delect_item(orders_list, "order")
-# TODO
-# BONUS: lists orders by status or courier
-        # if action == 6:
-            # list orders by status or courier
+        if action == 6:
+            list_orders_by_key(orders_list, "status")
+        if action == 7:
+            list_orders_by_key(orders_list, "courier")
 
+def list_orders_by_key(orders_list, sort_by: str):
+    """
+    sort orders by keys in orders dict
+    sort_by: key (status/courier)
+    """
+    def myFunc(e):
+        return e[sort_by]
+    temp_list = list(orders_list)
+    temp_list.sort(key=myFunc)
+    for x in temp_list:
+        print(x)
+    pass
+    
 
 def exit_program(prod_list, cour_list, orders_list):
     """
