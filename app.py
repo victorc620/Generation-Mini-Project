@@ -33,9 +33,9 @@ def main():
 4. Delete courier 
 """
     
-    prod_list = load_csv_to_list_of_dict("product.csv")
-    cour_list = load_csv_to_list_of_dict("courier.csv")
-    orders_list = load_csv_to_list_of_dict("orders.csv")
+    prod_list = load_csv_to_list_of_dict("data/product.csv")
+    cour_list = load_csv_to_list_of_dict("data/courier.csv")
+    orders_list = load_csv_to_list_of_dict("data/orders.csv")
     status_list = ["Preparing", "Awaiting Shipment", "Shipped", "Refunded"]
     
     while True: #Main Menu Loop
@@ -139,9 +139,9 @@ def exit_program(prod_list, cour_list, orders_list):
     Export prod_list, cour_list, orders_list to csv file
     Exit the program
     """
-    export_list_of_dict_to_csv("product.csv",prod_list, products_csv_header)
-    export_list_of_dict_to_csv("courier.csv",cour_list, courier_csv_header)
-    export_list_of_dict_to_csv("orders.csv", orders_list, orders_csv_header)
+    export_list_of_dict_to_csv("data/product.csv",prod_list, products_csv_header)
+    export_list_of_dict_to_csv("data/courier.csv",cour_list, courier_csv_header)
+    export_list_of_dict_to_csv("data/orders.csv", orders_list, orders_csv_header)
     print("Thanks for using me, Bye")
     exit()
 
