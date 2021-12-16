@@ -1,3 +1,38 @@
+#Temp for unit test
+def add(a,b):
+    return a+b
+
+def subtract(a,b):
+    return a-b
+
+def multiply(a,b):
+    return a*b
+
+def divide(a,b):
+    if b == 0:
+        raise ValueError("Can not divide by zero!")
+    return a/b
+
+class Employee:
+    
+    raise_amt = 1.05
+    
+    def __init__(self, first, last, pay):
+        self.first = first
+        self.last = last
+        self.pay = pay
+        
+    @property
+    def email(self):
+        return f"{self.first}.{self.last}@email.com"
+    
+    @property
+    def fullname(self):
+        return f"{self.first}  {self.last}"
+    
+    def apply_raise(self):
+        self.pay = int(self.pay * self.raise_amt)
+
 import csv
 
 products_csv_header = ["name", "price"]
