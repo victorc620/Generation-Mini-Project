@@ -1,5 +1,8 @@
 from unittest.mock import patch, Mock, mock_open
-from app import load_csv_to_list_of_dict
+from app import (
+    menu_input, 
+    load_csv_to_list_of_dict
+    )
 
 def menu_input(max_menu_index):
     while True:
