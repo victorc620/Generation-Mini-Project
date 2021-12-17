@@ -315,6 +315,7 @@ def menu_input(max_menu_index):
     
 # I/O function
 def load_csv_to_list_of_dict(file_name:str):
+    # Unit test completed
     """
     Load from orders.csv to creat a list of order(dict)
     """
