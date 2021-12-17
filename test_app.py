@@ -1,19 +1,9 @@
 from unittest.mock import patch, Mock, mock_open
 from app import (
-    menu_input, 
+    menu_input,
+    create_new_item,
     load_csv_to_list_of_dict
     )
-
-def menu_input(max_menu_index):
-    while True:
-        try:
-            action = int(input("Enter your action: "))
-            if action>max_menu_index:
-                raise Exception
-        except Exception:
-            print("\nERROR: Please enter an valid action")
-            continue
-        return action
     
 @patch("builtins.input")
 def test_menu_input_hp(mock_input: Mock):
@@ -25,6 +15,26 @@ def test_menu_input_hp(mock_input: Mock):
     
     assert result == expected
 
+# Unit Test for create_new_item(item_list, list_name)
+@patch("builtins.input")
+def test_create_new_item_prod(mock_input: Mock):
+    item = {}
+    item_list=[{"name": "product_1", "price":10}]
+    list_name = "product"
+    mock_input.side_effect = ["test_product_name", 1.5]
+    expected = [{"name": "product_1", "price":10},{"name": "test_product_name", "price":1.5}]
+    
+    result = create_new_item(item_list, list_name)
+    
+    assert result == expected
+    
+    
+    
+    
+    
+
+
+# Unit Test for menu_input(max_menu_index)
 @patch("builtins.input")
 def test_menu_input_uhp(mock_input: Mock):
     max_menu_index = 5
