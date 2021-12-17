@@ -17,7 +17,7 @@ def test_menu_input_hp(mock_input: Mock):
 
 # Unit Test for create_new_item(item_list, list_name)
 @patch("builtins.input")
-def test_create_new_item_prod(mock_input: Mock):
+def test_create_new_item_prod_hp(mock_input: Mock):
     item = {}
     item_list=[{"name": "product_1", "price":10}]
     list_name = "product"
@@ -28,11 +28,19 @@ def test_create_new_item_prod(mock_input: Mock):
     
     assert result == expected
     
+@patch("builtins.input")
+def test_create_new_item_cour_hp(mock_input: Mock):
+    item = {}
+    item_list=[{"name": "courier_1", "phone":88888888}]
+    list_name = "courier"
+    mock_input.side_effect = ["test_courier_name", 77777777]
+    expected = [{"name": "courier_1", "phone":88888888},{"name": "test_courier_name", "phone":77777777}]
+    
+    result = create_new_item(item_list, list_name)
+    
+    assert result == expected
     
     
-    
-    
-
 
 # Unit Test for menu_input(max_menu_index)
 @patch("builtins.input")
