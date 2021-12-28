@@ -1,11 +1,10 @@
-import csv
+from file_handler import load_csv_to_list_of_dict, export_list_of_dict_to_csv
 
 products_csv_header = ["name", "price"]
 courier_csv_header = ["name", "phone"]
 orders_csv_header = ["customer_name", "customer_address", "customer_phone", "courier", "status", "items"]
 
-def main():
-
+def main_menu(prod_list, cour_list, orders_list):
     main_menu = """
 ------MAIN MENU------
 
@@ -14,7 +13,27 @@ def main():
 2. Enter courier menu
 3. Enter order menu
 """
+    print(main_menu)        
+    action = menu_input(3)
+    
+    if action == 0:
+        exit_program(prod_list, cour_list, orders_list)
+    elif action == 1:
+        #Product Menu
+        item_menu(prod_list, "product")
+    elif action == 2:
+        #Courier Menu
+        item_menu(cour_list, "courier")
+    elif action == 3:
+        orders_menu(orders_list, prod_list, cour_list)
 
+def item_menu(item_list: list, menu_name: str):
+    """
+    Product/Courier menu
+    item_list: prod_list/cour_list
+    menu_name: "product" or "courier"
+    """
+    
     prod_menu = """
 ------PRODUCT MENU------
 0. Return to main menu
@@ -32,56 +51,29 @@ def main():
 3. Update existing courier
 4. Delete courier 
 """
+    if menu_name == "product":
+        menu_interface = prod_menu
+    elif menu_name == "courier":
+        menu_interface = cour_menu
     
-    prod_list = load_csv_to_list_of_dict("data/product.csv")
-    cour_list = load_csv_to_list_of_dict("data/courier.csv")
-    orders_list = load_csv_to_list_of_dict("data/orders.csv")
-    status_list = ["Preparing", "Awaiting Shipment", "Shipped", "Refunded"]
-    
-    while True: #Main Menu Loop
-        print(main_menu)        
-        action = menu_input(5)
-        
-        if action == 0:
-            exit_program(prod_list, cour_list, orders_list)
-        if action == 1:
-            #Product Menu
-            item_menu(prod_list, "product", prod_menu)
-        if action == 2:
-            #Courier Menu
-            item_menu(cour_list, "courier", cour_menu)
-        if action == 3:
-            orders_menu(orders_list, status_list, prod_list, cour_list)
-        if action == 4:
-            print(prod_list)
-            print(cour_list)
-            print(orders_list)
-
-def item_menu(item_list: list, menu_name: str, menu_interface):
-    """
-    Enter the Product/Courier menu
-    item_list: prod_list/cour_list
-    menu_name: "product" or "courier"
-    menu_interface: prod_menu or cour_menu
-    """
     while True: #Product/Courier Menu Loop
         print(menu_interface)
         action = menu_input(4)
         
         if action == 0:
             return
-        if action == 1:
+        elif action == 1:
             print(item_list)
-        if action == 2:
+        elif action == 2:
             create_new_item(item_list, menu_name)
-        if action == 3:
+        elif action == 3:
             update_existing_item(item_list, menu_name)
-        if action == 4:
+        elif action == 4:
             delect_item(item_list, menu_name)
 
-def orders_menu(orders_list, status_list, prod_list, cour_list):
+def orders_menu(orders_list, prod_list, cour_list):
     """
-    Enter the Orders menu
+    Orders menu
     orders_list = orders_list
     status_list = status_list
     cour_list = cour_list
@@ -98,40 +90,31 @@ def orders_menu(orders_list, status_list, prod_list, cour_list):
 6. List orders by status
 7. List orders by courier
 """
-        
+
+    status_list = ["Preparing", "Awaiting Shipment", "Shipped", "Refunded"]
+
     while True:
         print(order_menu)
         action = menu_input(7)
         
         if action == 0:
             return
-        if action == 1: #elif
+        elif action == 1: #elif
             print(orders_list)
-        if action == 2:
+        elif action == 2:
             create_new_order(orders_list,prod_list,cour_list)
-        if action == 3:
+        elif action == 3:
             update_order_status(orders_list, status_list)
-        if action == 4:
+        elif action == 4:
             update_existing_order(orders_list, status_list, prod_list, cour_list)
-        if action == 5:
+        elif action == 5:
             delect_item(orders_list, "order")
-        if action == 6:
+        elif action == 6:
             list_orders_by_key(orders_list, "status")
-        if action == 7:
+        elif action == 7:
             list_orders_by_key(orders_list, "courier")
 
-def list_orders_by_key(orders_list, sort_by: str):
-    """
-    sort orders by keys in orders dict
-    sort_by: key (status/courier)
-    """
-    def myFunc(e):
-        return e[sort_by]
-    temp_list = list(orders_list)
-    temp_list.sort(key=myFunc)
-    for x in temp_list:
-        print(x)
-    pass
+
     
 
 def exit_program(prod_list, cour_list, orders_list):
@@ -266,7 +249,7 @@ def update_existing_order(orders_list, status_list, prod_list, cour_list):
         cus_name = str(input("Input for customer name: "))
         if cus_name:
             orders_list[new_order_index]["customer_name"] = cus_name
-        
+
         cus_address = str(input("Input for customer address: "))
         if cus_address:
             orders_list[new_order_index]["customer_address"] = cus_address            
@@ -292,11 +275,20 @@ def update_existing_order(orders_list, status_list, prod_list, cour_list):
             orders_list[new_order_index]["items"] = [index.strip() for index in item_index_string.split(",")]
             
         return orders_list
-    
-def update_order_property(index, key, value, orders_list): #Check wether value is True
-        if value:
-            orders_list[index][key] = value
-            
+
+def list_orders_by_key(orders_list, sort_by: str):
+    """
+    sort orders by keys in orders dict
+    sort_by: key (status/courier)
+    """
+    def myFunc(e):
+        return e[sort_by]
+    temp_list = list(orders_list)
+    temp_list.sort(key=myFunc)
+    for x in temp_list:
+        print(x)
+    pass
+
 def print_index(name):
     """Print item in list with index"""
     for index, item in enumerate(name):
@@ -312,31 +304,14 @@ def menu_input(max_menu_index):
             print("\nERROR: Please enter an valid action")
             continue
         return action
-    
-# I/O function
-def load_csv_to_list_of_dict(file_name:str):
-    # Unit test completed
-    """
-    Load from orders.csv to creat a list of order(dict)
-    """
-    list = []
-    with open(file_name, "r") as f:
-        csv_file = csv.DictReader(f)
-        for line in csv_file:
-            list.append(line)
-        return list
-        
-def export_list_of_dict_to_csv(filename: str, list_of_dict: list, fieldnames: list):
-    """Export orders_list to a csv file"""
-    try:
-        with open(filename, "w") as f:
-            writer = csv.DictWriter(f, fieldnames=fieldnames)
-            writer.writeheader()
-            for line in list_of_dict:
-                writer.writerow(line)
-    except:
-        print("Failed to open file")
 
+def main():
+    prod_list = load_csv_to_list_of_dict("data/product.csv")
+    cour_list = load_csv_to_list_of_dict("data/courier.csv")
+    orders_list = load_csv_to_list_of_dict("data/orders.csv")
+    
+    while True: #Main Menu Loop
+        main_menu(prod_list, cour_list, orders_list)
 
 if __name__ == "__main__":
     main()
