@@ -114,9 +114,6 @@ def orders_menu(orders_list, prod_list, cour_list):
         elif action == 7:
             list_orders_by_key(orders_list, "courier")
 
-
-    
-
 def exit_program(prod_list, cour_list, orders_list):
     """
     Export prod_list, cour_list, orders_list to csv file
@@ -128,7 +125,6 @@ def exit_program(prod_list, cour_list, orders_list):
     print("Thanks for using me, Bye")
     exit()
 
-            
 def create_new_item(item_list, list_name):
     """
     Add a new product/couries to the product/courier list
@@ -187,7 +183,6 @@ def delect_item(item_list, list_name):
         item_list.pop(item_index)
         print(item_list)
         return item_list
-
 
 def create_new_order(orders_list,prod_list, cour_list):
     """
@@ -249,11 +244,11 @@ def update_existing_order(orders_list, status_list, prod_list, cour_list):
         cus_name = str(input("Input for customer name: "))
         if cus_name:
             orders_list[new_order_index]["customer_name"] = cus_name
-
+            
         cus_address = str(input("Input for customer address: "))
         if cus_address:
             orders_list[new_order_index]["customer_address"] = cus_address            
-        
+            
         cus_phone = str(input("Input for customer phone number: "))
         if cus_phone:
             orders_list[new_order_index][ "customer_phone"] = cus_phone
@@ -265,7 +260,7 @@ def update_existing_order(orders_list, status_list, prod_list, cour_list):
         cour_index = input("Input the courier index to select courier: ")
         if cour_index:
             orders_list[new_order_index]["courier"] = int(cour_index)
-        
+            
         print_index(status_list)
         index_status = input("What is the new order status?: ")
         if index_status:
@@ -285,8 +280,17 @@ def list_orders_by_key(orders_list, sort_by: str):
         return e[sort_by]
     temp_list = list(orders_list)
     temp_list.sort(key=myFunc)
-    for x in temp_list:
-        print(x)
+    for item in temp_list:
+        print(f"""
+Customer
+Name: {item["customer_name"]}
+Address: {item["customer_address"]}
+Phone: {item["customer_phone"]}
+Courier: {item["courier"]}
+Status: {item["status"]}
+Item: {item["items"]}
+"""
+        )
     pass
 
 def print_index(name):
