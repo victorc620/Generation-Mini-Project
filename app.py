@@ -282,7 +282,6 @@ def list_orders_by_key(orders_list, sort_by: str):
     temp_list.sort(key=myFunc)
     for item in temp_list:
         print(f"""
-Customer
 Name: {item["customer_name"]}
 Address: {item["customer_address"]}
 Phone: {item["customer_phone"]}
