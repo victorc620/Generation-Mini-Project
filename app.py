@@ -36,6 +36,7 @@ def item_menu(item_list: list, menu_name: str):
     
     prod_menu = """
 ------PRODUCT MENU------
+
 0. Return to main menu
 1. Print product list
 2. Create new product
@@ -45,6 +46,7 @@ def item_menu(item_list: list, menu_name: str):
 
     cour_menu = """
 ------COURIER MENU------
+
 0. Return to main menu
 1. Print courier list
 2. Create new courier
@@ -63,7 +65,7 @@ def item_menu(item_list: list, menu_name: str):
         if action == 0:
             return
         elif action == 1:
-            print(item_list)
+            print_item(item_list)
         elif action == 2:
             create_new_item(item_list, menu_name)
         elif action == 3:
@@ -81,6 +83,7 @@ def orders_menu(orders_list, prod_list, cour_list):
     
     order_menu = """
 ------ORDERS MENU------
+
 0. Return to main menu
 1. Print order list
 2. Create new order
@@ -100,7 +103,7 @@ def orders_menu(orders_list, prod_list, cour_list):
         if action == 0:
             return
         elif action == 1: #elif
-            print(orders_list)
+            print_item(orders_list)
         elif action == 2:
             create_new_order(orders_list,prod_list,cour_list)
         elif action == 3:
@@ -113,6 +116,12 @@ def orders_menu(orders_list, prod_list, cour_list):
             list_orders_by_key(orders_list, "status")
         elif action == 7:
             list_orders_by_key(orders_list, "courier")
+
+def print_item(lists):
+    for element in lists:
+        print("")
+        for key,values in element.items():
+            print(f"{key}: {values}")
 
 def exit_program(prod_list, cour_list, orders_list):
     """
