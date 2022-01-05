@@ -19,10 +19,8 @@ def main_menu(prod_list, cour_list, orders_list):
     if action == 0:
         exit_program(prod_list, cour_list, orders_list)
     elif action == 1:
-        #Product Menu
         item_menu(prod_list, "product")
     elif action == 2:
-        #Courier Menu
         item_menu(cour_list, "courier")
     elif action == 3:
         orders_menu(orders_list, prod_list, cour_list)
