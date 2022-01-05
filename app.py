@@ -1,4 +1,4 @@
-from file_handler import load_csv_to_list_of_dict, export_list_of_dict_to_csv
+from file_handler import load_from_db, load_csv_to_list_of_dict, export_list_of_dict_to_csv
 
 products_csv_header = ["name", "price"]
 courier_csv_header = ["name", "phone"]
@@ -316,7 +316,7 @@ def menu_input(max_menu_index):
         return action
 
 def main():
-    prod_list = load_csv_to_list_of_dict("data/product.csv")
+    prod_list = load_from_db("product")
     cour_list = load_csv_to_list_of_dict("data/courier.csv")
     orders_list = load_csv_to_list_of_dict("data/orders.csv")
     

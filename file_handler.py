@@ -24,7 +24,7 @@ def export_list_of_dict_to_csv(filename: str, list_of_dict: list, fieldnames: li
     except:
         print("Failed to open file")
         
-def load_from_db():
+def load_from_db(table_name):
     """Load data from database to create a list of dictionaries """
     
     list_of_dict = []
@@ -48,7 +48,7 @@ def load_from_db():
     mycursor = mydb.cursor(pymysql.cursors.DictCursor)
     
     # Execute SQL query
-    mycursor.execute('SELECT * FROM product')
+    mycursor.execute(f"SELECT * FROM {table_name}")
     
     # Gets all rows from the result
     rows = mycursor.fetchall()
