@@ -1,4 +1,4 @@
-from file_handler import load_from_db, load_csv_to_list_of_dict, export_list_of_dict_to_csv
+from file_handler import load_from_db, insert_into_db, load_csv_to_list_of_dict, export_list_of_dict_to_csv
 
 products_csv_header = ["name", "price"]
 courier_csv_header = ["name", "phone"]
@@ -126,7 +126,8 @@ def exit_program(prod_list, cour_list, orders_list):
     Export prod_list, cour_list, orders_list to csv file
     Exit the program
     """
-    export_list_of_dict_to_csv("data/product.csv",prod_list, products_csv_header)
+    # export_list_of_dict_to_csv("data/product.csv",prod_list, products_csv_header)
+    insert_into_db("product", prod_list)
     export_list_of_dict_to_csv("data/courier.csv",cour_list, courier_csv_header)
     export_list_of_dict_to_csv("data/orders.csv", orders_list, orders_csv_header)
     print("Thanks for using me, Bye")
@@ -295,9 +296,8 @@ Phone: {item["customer_phone"]}
 Courier: {item["courier"]}
 Status: {item["status"]}
 Item: {item["items"]}
-"""
-        )
-    pass
+""")
+
 
 def print_index(name):
     """Print item in list with index"""
@@ -316,7 +316,7 @@ def menu_input(max_menu_index):
         return action
 
 def main():
-    prod_list = load_from_db("product")
+    prod_list = load_from_db("SELECT * from product")
     cour_list = load_csv_to_list_of_dict("data/courier.csv")
     orders_list = load_csv_to_list_of_dict("data/orders.csv")
     

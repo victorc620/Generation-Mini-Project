@@ -24,11 +24,37 @@ def export_list_of_dict_to_csv(filename: str, list_of_dict: list, fieldnames: li
     except:
         print("Failed to open file")
         
-def load_from_db(table_name):
-    """Load data from database to create a list of dictionaries """
+def load_from_db(statement):
+    """
+    Load data from database to create a list of dictionaries
+    statement: MySQL code
+    return: List of dictionaries
+    """
+    # Load environment variables from .env file
+    load_dotenv()
+    host = os.environ.get("mysql_host")
+    user = os.environ.get("mysql_user")
+    password = os.environ.get("mysql_pass")
+    database = os.environ.get("mysql_db")
+
+    # Establish a database connection
+    connection = pymysql.connect(host,user,password,database, autocommit=True)
+    cursor = connection.cursor(pymysql.cursors.DictCursor)
     
-    list_of_dict = []
+    # Execute SQL query
+    cursor.execute(statement)
     
+    # Gets all rows from the result
+    rows = cursor.fetchall()
+    list_of_dict = [row for row in rows]
+    
+    #Close connection with database
+    cursor.close()
+    connection.close()
+        
+    return list_of_dict
+
+def insert_into_db(table_name, item_list):
     # Load environment variables from .env file
     load_dotenv()
     host = os.environ.get("mysql_host")
@@ -44,15 +70,20 @@ def load_from_db(table_name):
         database
     )
     
-    # Return dict
-    mycursor = mydb.cursor(pymysql.cursors.DictCursor)
+    mycursor = mydb.cursor()
     
-    # Execute SQL query
-    mycursor.execute(f"SELECT * FROM {table_name}")
+    #insert list_of_dict to db row
+    i=0
+    for element in item_list:
+            sql = f"""
+                INSERT IGNORE INTO {table_name} (id, name, price)
+                VALUES (%s,%s,%s)"""
+            val = ("NULL", f"{element['name']}", f"{element['price']}")
+            print(i)
+            i+=1
+            mycursor.execute(sql, val)
+
+    mydb.commit()
+    mycursor.close()
+    mydb.close()
     
-    # Gets all rows from the result
-    rows = mycursor.fetchall()
-    for row in rows:
-        list_of_dict.append(row)
-        
-    return list_of_dict
