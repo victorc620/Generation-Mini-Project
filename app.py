@@ -1,10 +1,10 @@
-from file_handler import load_from_db, insert_into_db, load_csv_to_list_of_dict, export_list_of_dict_to_csv
+from file_handler import execute_query, load_csv_to_list_of_dict, export_list_of_dict_to_csv
 
 products_csv_header = ["name", "price"]
 courier_csv_header = ["name", "phone"]
 orders_csv_header = ["customer_name", "customer_address", "customer_phone", "courier", "status", "items"]
 
-def main_menu(prod_list, cour_list, orders_list):
+def main_menu(cour_list, orders_list):
     main_menu = """
 ------MAIN MENU------
 
@@ -17,20 +17,16 @@ def main_menu(prod_list, cour_list, orders_list):
     action = menu_input(3)
     
     if action == 0:
-        exit_program(prod_list, cour_list, orders_list)
+        pass
+        # exit_program(cour_list, orders_list)
     elif action == 1:
-        item_menu(prod_list, "product")
-    elif action == 2:
-        item_menu(cour_list, "courier")
-    elif action == 3:
-        orders_menu(orders_list, prod_list, cour_list)
+        product_menu()
+    # elif action == 2:
+    #     item_menu(cour_list, "courier")
+    # elif action == 3:
+    #     orders_menu(orders_list, prod_list, cour_list)
 
-def item_menu(item_list: list, menu_name: str):
-    """
-    Product/Courier menu
-    item_list: prod_list/cour_list
-    menu_name: "product" or "courier"
-    """
+def product_menu():
     
     prod_menu = """
 ------PRODUCT MENU------
@@ -42,6 +38,23 @@ def item_menu(item_list: list, menu_name: str):
 4. Delete product
 """
 
+    while True: #Product/Courier Menu Loop
+        print(prod_menu)
+        action = menu_input(4)
+        
+        if action == 0:
+            return
+        elif action == 1:
+            print_item("SELECT * FROM product")
+        elif action == 2:
+            create_new_product()
+        # elif action == 3:
+        #     update_existing_item(item_list, menu_name)
+        # elif action == 4:
+        #     delect_item(item_list, menu_name)
+            
+def courier_menu():
+
     cour_menu = """
 ------COURIER MENU------
 
@@ -51,104 +64,116 @@ def item_menu(item_list: list, menu_name: str):
 3. Update existing courier
 4. Delete courier 
 """
-    if menu_name == "product":
-        menu_interface = prod_menu
-    elif menu_name == "courier":
-        menu_interface = cour_menu
-    
+
     while True: #Product/Courier Menu Loop
-        print(menu_interface)
+        print(cour_menu)
         action = menu_input(4)
         
         if action == 0:
             return
-        elif action == 1:
-            print_item(item_list)
-        elif action == 2:
-            create_new_item(item_list, menu_name)
-        elif action == 3:
-            update_existing_item(item_list, menu_name)
-        elif action == 4:
-            delect_item(item_list, menu_name)
+        # elif action == 1:
+            # print_item("SELECT * FROM courier")
+        # elif action == 2:
+        #     create_new_item(item_list, menu_name)
+        # elif action == 3:
+        #     update_existing_item(item_list, menu_name)
+        # elif action == 4:
+        #     delect_item(item_list, menu_name)
 
-def orders_menu(orders_list, prod_list, cour_list):
-    """
-    Orders menu
-    orders_list = orders_list
-    status_list = status_list
-    cour_list = cour_list
-    """
+# def orders_menu(orders_list, prod_list, cour_list):
+#     """
+#     Orders menu
+#     orders_list = orders_list
+#     status_list = status_list
+#     cour_list = cour_list
+#     """
     
-    order_menu = """
-------ORDERS MENU------
+#     order_menu = """
+# ------ORDERS MENU------
 
-0. Return to main menu
-1. Print order list
-2. Create new order
-3. Update existing order status
-4. Update existing order
-5. Delete order
-6. List orders by status
-7. List orders by courier
-"""
+# 0. Return to main menu
+# 1. Print order list
+# 2. Create new order
+# 3. Update existing order status
+# 4. Update existing order
+# 5. Delete order
+# 6. List orders by status
+# 7. List orders by courier
+# """
 
-    status_list = ["Preparing", "Awaiting Shipment", "Shipped", "Refunded"]
+#     status_list = ["Preparing", "Awaiting Shipment", "Shipped", "Refunded"]
 
-    while True:
-        print(order_menu)
-        action = menu_input(7)
+#     while True:
+#         print(order_menu)
+#         action = menu_input(7)
         
-        if action == 0:
-            return
-        elif action == 1: #elif
-            print_item(orders_list)
-        elif action == 2:
-            create_new_order(orders_list,prod_list,cour_list)
-        elif action == 3:
-            update_order_status(orders_list, status_list)
-        elif action == 4:
-            update_existing_order(orders_list, status_list, prod_list, cour_list)
-        elif action == 5:
-            delect_item(orders_list, "order")
-        elif action == 6:
-            list_orders_by_key(orders_list, "status")
-        elif action == 7:
-            list_orders_by_key(orders_list, "courier")
+#         if action == 0:
+#             return
+#         elif action == 1: #elif
+#             print_item(orders_list)
+#         elif action == 2:
+#             create_new_order(orders_list,prod_list,cour_list)
+#         elif action == 3:
+#             update_order_status(orders_list, status_list)
+#         elif action == 4:
+#             update_existing_order(orders_list, status_list, prod_list, cour_list)
+#         elif action == 5:
+#             delect_item(orders_list, "order")
+#         elif action == 6:
+#             list_orders_by_key(orders_list, "status")
+#         elif action == 7:
+#             list_orders_by_key(orders_list, "courier")
 
-def print_item(lists):
+#Re-write complete
+def print_item(statment):
+    """Print out content from Database
+    statment: MySQL statment"""
+    lists = execute_query(statment)
     for element in lists:
         print("")
         for key,values in element.items():
             print(f"{key}: {values}")
 
-def exit_program(prod_list, cour_list, orders_list):
-    """
-    Export prod_list, cour_list, orders_list to csv file
-    Exit the program
-    """
-    # export_list_of_dict_to_csv("data/product.csv",prod_list, products_csv_header)
-    insert_into_db("product", prod_list)
-    export_list_of_dict_to_csv("data/courier.csv",cour_list, courier_csv_header)
-    export_list_of_dict_to_csv("data/orders.csv", orders_list, orders_csv_header)
-    print("Thanks for using me, Bye")
-    exit()
+# def exit_program(prod_list, cour_list, orders_list):
+#     """
+#     Export prod_list, cour_list, orders_list to csv file
+#     Exit the program
+#     """
+#     # export_list_of_dict_to_csv("data/product.csv",prod_list, products_csv_header)
+#     insert_into_db("product", prod_list)
+#     export_list_of_dict_to_csv("data/courier.csv",cour_list, courier_csv_header)
+#     export_list_of_dict_to_csv("data/orders.csv", orders_list, orders_csv_header)
+#     print("Thanks for using me, Bye")
+#     exit()
 
-def create_new_item(item_list, list_name):
-    """
-    Add a new product/couries to the product/courier list
-    item_list: prod_list/ cour_list
-    list_key_1: "product"/"courier"
-    """
-    item = {}
-    item["name"] = input(f"Enter the {list_name} name: ")
-    if list_name == "product":
-        item["price"] = float(input(f"Enter the price: "))
-    if list_name == "courier":
-        item["phone"] = int(input(f"Enter the phone: "))
+# def exit_program():
+#     insert_into_db("product", prod_list)
+#     print("Thanks for using me, Bye")
+#     exit()
+
+# def create_new_item(item_list, list_name):
+#     """
+#     Add a new product/couries to the product/courier list
+#     item_list: prod_list/ cour_list
+#     list_key_1: "product"/"courier"
+#     """
+#     item = {}
+#     item["name"] = input(f"Enter the {list_name} name: ")
+#     if list_name == "product":
+#         item["price"] = float(input(f"Enter the price: "))
+#     if list_name == "courier":
+#         item["phone"] = int(input(f"Enter the phone: "))
     
-    item_list.append(item)
-    print(item_list)
-    return item_list
+#     item_list.append(item)
+#     print(item_list)
+#     return item_list
+
+def create_new_product():
+    name = input(f"Enter the product name: ")
+    price = input(f"Enter the price name: ")
+    sql = "INSERT INTO product (name, price) VALUES (%s,%s)"
+    val = (name, price)
+    execute_query(sql, val)
 
 def update_existing_item(item_list, list_name):
     """
@@ -316,12 +341,11 @@ def menu_input(max_menu_index):
         return action
 
 def main():
-    prod_list = load_from_db("SELECT * from product")
     cour_list = load_csv_to_list_of_dict("data/courier.csv")
     orders_list = load_csv_to_list_of_dict("data/orders.csv")
     
     while True: #Main Menu Loop
-        main_menu(prod_list, cour_list, orders_list)
+        main_menu(cour_list, orders_list)
 
 if __name__ == "__main__":
     main()
