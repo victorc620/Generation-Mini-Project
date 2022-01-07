@@ -1,5 +1,4 @@
-from typing import ItemsView
-from file_handler import execute_query, load_csv_to_list_of_dict, export_list_of_dict_to_csv
+from file_handler import execute_query
 
 def main_menu():
     main_menu = """
@@ -97,7 +96,7 @@ def orders_menu():
         
         if action == 0:
             return
-        elif action == 1: #elif
+        elif action == 1:
             print_item("SELECT * FROM orders")
         elif action == 2:
             create_new_order()
