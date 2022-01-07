@@ -4,7 +4,7 @@ products_csv_header = ["name", "price"]
 courier_csv_header = ["name", "phone"]
 orders_csv_header = ["customer_name", "customer_address", "customer_phone", "courier", "status", "items"]
 
-def main_menu(cour_list, orders_list):
+def main_menu(orders_list):
     main_menu = """
 ------MAIN MENU------
 
@@ -21,8 +21,8 @@ def main_menu(cour_list, orders_list):
         # exit_program(cour_list, orders_list)
     elif action == 1:
         product_menu()
-    # elif action == 2:
-    #     item_menu(cour_list, "courier")
+    elif action == 2:
+        courier_menu()
     # elif action == 3:
     #     orders_menu(orders_list, prod_list, cour_list)
 
@@ -50,8 +50,8 @@ def product_menu():
             create_new_product()
         elif action == 3:
             update_existing_product()
-        # elif action == 4:
-        #     delect_item(item_list, menu_name)
+        elif action == 4:
+            delete_product()
             
 def courier_menu():
 
@@ -71,14 +71,14 @@ def courier_menu():
         
         if action == 0:
             return
-        # elif action == 1:
-            # print_item("SELECT * FROM courier")
-        # elif action == 2:
-        #     create_new_item(item_list, menu_name)
-        # elif action == 3:
-        #     update_existing_item(item_list, menu_name)
-        # elif action == 4:
-        #     delect_item(item_list, menu_name)
+        elif action == 1:
+            print_item("SELECT * FROM courier")
+        elif action == 2:
+            create_new_courier()
+        elif action == 3:
+            update_existing_product()
+        elif action == 4:
+            delete_courier()
 
 # def orders_menu(orders_list, prod_list, cour_list):
 #     """
@@ -124,7 +124,6 @@ def courier_menu():
 #         elif action == 7:
 #             list_orders_by_key(orders_list, "courier")
 
-#Re-write complete
 def print_item(statment):
     """Print out content from Database
     statment: MySQL statment"""
@@ -135,97 +134,55 @@ def print_item(statment):
             print(f"{key}: {values}")
     return lists
 
-# def exit_program(prod_list, cour_list, orders_list):
-#     """
-#     Export prod_list, cour_list, orders_list to csv file
-#     Exit the program
-#     """
-#     # export_list_of_dict_to_csv("data/product.csv",prod_list, products_csv_header)
-#     insert_into_db("product", prod_list)
-#     export_list_of_dict_to_csv("data/courier.csv",cour_list, courier_csv_header)
-#     export_list_of_dict_to_csv("data/orders.csv", orders_list, orders_csv_header)
-#     print("Thanks for using me, Bye")
-#     exit()
-
-# def exit_program():
-#     insert_into_db("product", prod_list)
-#     print("Thanks for using me, Bye")
-#     exit()
-
-# def create_new_item(item_list, list_name):
-#     """
-#     Add a new product/couries to the product/courier list
-#     item_list: prod_list/ cour_list
-#     list_key_1: "product"/"courier"
-#     """
-#     item = {}
-#     item["name"] = input(f"Enter the {list_name} name: ")
-#     if list_name == "product":
-#         item["price"] = float(input(f"Enter the price: "))
-#     if list_name == "courier":
-#         item["phone"] = int(input(f"Enter the phone: "))
-    
-#     item_list.append(item)
-#     print(item_list)
-#     return item_list
-
 def create_new_product():
     name = input(f"Enter the product name: ")
-    price = input(f"Enter the price name: ")
+    price = input(f"Enter the price: ")
     sql = "INSERT IGNORE INTO product (name, price) VALUES (%s,%s)"
     val = (name, price)
     execute_query(sql, val)
     
 def update_existing_product():
-    products_list = print_item("SELECT * FROM product")
+    print_item("SELECT * FROM product")
     id_input = int(input("Enter the product's ID: "))
-    id_name
+    name = str(input("Enter the new product name: "))
+    price = float(input("Enter the new price: "))
+    sql = "UPDATE product SET name = %s, price = %s WHERE id = %s"
+    val = (name, price, id_input)
+    execute_query(sql, val)
 
-def delete_existing_product():
-    pass
+def delete_product():
+    print_item("SELECT * FROM product")
+    id_input = int(input("Enter the ID of product to be deleted: "))
+    sql = "DELETE FROM product WHERE id = %s"
+    val = id_input
+    execute_query(sql, val)
 
-# def update_existing_item(item_list, list_name):
-#     """
-#     Update an existing product/courier with new name
-#     item_list: prod_list/ cour_list
-#     list_name: "product"/"courier"
-#     """
-#     while True:
-#         print_index(item_list)
-#         try:
-#             new__index = int(input(f"Enter the index of the {list_name} to be updated: "))
-#             if new__index > (len(item_list)-1):
-#                 raise Exception
-#         except Exception:
-#             print("\nERROR: Please enter an valid action!\n")
-#             continue
-        
-#         new_item_name = input(f"Enter the name of the new {list_name}: ")
-#         item_list[new__index]["name"] = new_item_name
-#         if list_name == "product":
-#             item_list[new__index]["price"] = float(input(f"Enter the new price: "))
-#         if list_name == "courier":
-#             item_list[new__index]["phone"] = int(input(f"Enter the new phone: "))            
-#         print(item_list)
-#         return item_list
+#-------------------------------------------------------------
+def create_new_courier():
+    name = input(f"Enter the courier name: ")
+    phone = input(f"Enter the phone: ")
+    sql = "INSERT IGNORE INTO courier (name, phone) VALUES (%s,%s)"
+    val = (name, phone)
+    execute_query(sql, val)
     
-def delect_item(item_list, list_name):
-    """
-    Delete an existing item from the list
-    item_list: prod_list/ cour_list
-    list_name: "product"/"courier"
-    """
-    print_index(item_list)
-    while True:
-        try: 
-            item_index = int(input(f"Enter the index of the {list_name} to be deleted: "))
-        except Exception:
-            print("\nERROR: Please enter an valid action!\n")
-            continue
-        item_list.pop(item_index)
-        print(item_list)
-        return item_list
+def update_existing_courier():
+    print_item("SELECT * FROM courier")
+    id_input = int(input("Enter the courier's ID: "))
+    name = str(input("Enter the new courier name: "))
+    phone = int(input("Enter the new phone number: "))
+    sql = "UPDATE product SET name = %s, phone = %s WHERE id = %s"
+    val = (name, phone, id_input)
+    #TO DO: IF an input is empty, do not update its respective table property Update properties for courier in courier table
+    execute_query(sql, val)
+    
+def delete_courier():
+    print_item("SELECT * FROM courier")
+    id_input = int(input("Enter the ID of courier to be deleted: "))
+    sql = "DELETE FROM courier WHERE id = %s"
+    val = id_input
+    execute_query(sql, val)
 
+#------------------------------------------------------------
 def create_new_order(orders_list,prod_list, cour_list):
     """
     Create new order in the list of orders
@@ -350,11 +307,11 @@ def menu_input(max_menu_index):
         return action
 
 def main():
-    cour_list = load_csv_to_list_of_dict("data/courier.csv")
+    # cour_list = load_csv_to_list_of_dict("data/courier.csv")
     orders_list = load_csv_to_list_of_dict("data/orders.csv")
     
     while True: #Main Menu Loop
-        main_menu(cour_list, orders_list)
+        main_menu(orders_list)
 
 if __name__ == "__main__":
     main()
