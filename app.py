@@ -103,10 +103,10 @@ def orders_menu():
             create_new_order()
         elif action == 3:
             update_order_status()
-        # elif action == 4:
-        #     update_existing_order(orders_list, status_list, prod_list, cour_list)
-        # elif action == 5:
-        #     delect_item(orders_list, "order")
+        elif action == 4:
+            update_existing_orders()
+        elif action == 5:
+            delete_orders()
         # elif action == 6:
         #     list_orders_by_key(orders_list, "status")
         # elif action == 7:
@@ -214,10 +214,16 @@ def update_existing_orders():
     print_item("SELECT * FROM product")
     item_str = str(input("Enter list of product index values (seperated with comma): "))
     
-    sql = ("UPDATE orders customer_name=%s, customer_address=%s, customer_phone=%s, courier_id=%s, delivery_status=%s, items=%s) WHERE customer_id = %s ")
+    sql = ("UPDATE orders SET customer_name=%s, customer_address=%s, customer_phone=%s, courier_id=%s, delivery_status=%s, items=%s WHERE customer_id = %s")
     val = (customer_name, customer_address, customer_phone, courier_id, status, item_str, input_id)
     execute_query(sql, val)
 
+def delete_orders():
+    print_item("SELECT * FROM orders")
+    input_id = int(input("Enter the customer id to delete orders: "))
+    sql = ("DELETE FROM orders WHERE customer_id = %s")
+    val = (input_id)
+    execute_query(sql, val)
 
 # def list_orders_by_key(orders_list, sort_by: str):
 #     """
