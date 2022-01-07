@@ -107,10 +107,10 @@ def orders_menu():
             update_existing_orders()
         elif action == 5:
             delete_orders()
-        # elif action == 6:
-        #     list_orders_by_key(orders_list, "status")
-        # elif action == 7:
-        #     list_orders_by_key(orders_list, "courier")
+        elif action == 6:
+            print_orders_by_sth("delivery_status")
+        elif action == 7:
+            print_orders_by_sth("courier")
 
 def print_item(statment):
     """Print out content from Database
@@ -225,25 +225,9 @@ def delete_orders():
     val = (input_id)
     execute_query(sql, val)
 
-# def list_orders_by_key(orders_list, sort_by: str):
-#     """
-#     sort orders by keys in orders dict
-#     sort_by: key (status/courier)
-#     """
-#     def myFunc(e):
-#         return e[sort_by]
-#     temp_list = list(orders_list)
-#     temp_list.sort(key=myFunc)
-#     for item in temp_list:
-#         print(f"""
-# Name: {item["customer_name"]}
-# Address: {item["customer_address"]}
-# Phone: {item["customer_phone"]}
-# Courier: {item["courier"]}
-# Status: {item["status"]}
-# Item: {item["items"]}
-# """)
-
+def print_orders_by_sth(column):
+    sql = f"SELECT * FROM orders ORDER BY {column} DESC"
+    print_item(sql)
 
 def print_index(name):
     """Print item in list with index"""
