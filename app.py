@@ -1,10 +1,7 @@
+from typing import ItemsView
 from file_handler import execute_query, load_csv_to_list_of_dict, export_list_of_dict_to_csv
 
-products_csv_header = ["name", "price"]
-courier_csv_header = ["name", "phone"]
-orders_csv_header = ["customer_name", "customer_address", "customer_phone", "courier", "status", "items"]
-
-def main_menu(orders_list):
+def main_menu():
     main_menu = """
 ------MAIN MENU------
 
@@ -17,14 +14,13 @@ def main_menu(orders_list):
     action = menu_input(3)
     
     if action == 0:
-        pass
-        # exit_program(cour_list, orders_list)
+        exit()
     elif action == 1:
         product_menu()
     elif action == 2:
         courier_menu()
-    # elif action == 3:
-    #     orders_menu(orders_list, prod_list, cour_list)
+    elif action == 3:
+        orders_menu()
 
 def product_menu():
     
@@ -80,49 +76,41 @@ def courier_menu():
         elif action == 4:
             delete_courier()
 
-# def orders_menu(orders_list, prod_list, cour_list):
-#     """
-#     Orders menu
-#     orders_list = orders_list
-#     status_list = status_list
-#     cour_list = cour_list
-#     """
+def orders_menu():
     
-#     order_menu = """
-# ------ORDERS MENU------
+    order_menu = """
+------ORDERS MENU------
 
-# 0. Return to main menu
-# 1. Print order list
-# 2. Create new order
-# 3. Update existing order status
-# 4. Update existing order
-# 5. Delete order
-# 6. List orders by status
-# 7. List orders by courier
-# """
+0. Return to main menu
+1. Print order list
+2. Create new order
+3. Update existing order status
+4. Update existing order
+5. Delete order
+6. List orders by status
+7. List orders by courier
+"""
 
-#     status_list = ["Preparing", "Awaiting Shipment", "Shipped", "Refunded"]
-
-#     while True:
-#         print(order_menu)
-#         action = menu_input(7)
+    while True:
+        print(order_menu)
+        action = menu_input(7)
         
-#         if action == 0:
-#             return
-#         elif action == 1: #elif
-#             print_item(orders_list)
-#         elif action == 2:
-#             create_new_order(orders_list,prod_list,cour_list)
-#         elif action == 3:
-#             update_order_status(orders_list, status_list)
-#         elif action == 4:
-#             update_existing_order(orders_list, status_list, prod_list, cour_list)
-#         elif action == 5:
-#             delect_item(orders_list, "order")
-#         elif action == 6:
-#             list_orders_by_key(orders_list, "status")
-#         elif action == 7:
-#             list_orders_by_key(orders_list, "courier")
+        if action == 0:
+            return
+        elif action == 1: #elif
+            print_item("SELECT * FROM orders")
+        elif action == 2:
+            create_new_order()
+        elif action == 3:
+            update_order_status()
+        # elif action == 4:
+        #     update_existing_order(orders_list, status_list, prod_list, cour_list)
+        # elif action == 5:
+        #     delect_item(orders_list, "order")
+        # elif action == 6:
+        #     list_orders_by_key(orders_list, "status")
+        # elif action == 7:
+        #     list_orders_by_key(orders_list, "courier")
 
 def print_item(statment):
     """Print out content from Database
@@ -183,117 +171,82 @@ def delete_courier():
     execute_query(sql, val)
 
 #------------------------------------------------------------
-def create_new_order(orders_list,prod_list, cour_list):
-    """
-    Create new order in the list of orders
-    orders_list = orders_list
-    cour_list = cour_list
-    """
-    orders_dict = {}
-    orders_dict["customer_name"] = str(input("Input for customer name: "))
-    orders_dict["customer_address"] = str(input("Input for customer address: "))
-    orders_dict["customer_phone"] = str(input("Input for customer phone number: "))
-    print_index(prod_list)
-    item_index_string = str(input("Enter list of product index values (seperated with comma): "))
-    print_index(cour_list)
-    orders_dict["courier"] = int(input("Input the courier index to select courier: "))
-    orders_dict["status"] = "Preparing"
-    orders_dict["items"] =  [index.strip() for index in item_index_string.split(",")]
-    orders_list.append(orders_dict)
-    return orders_list
+def create_new_order():
+    customer_name = str(input("Input for customer name: "))
+    customer_address = str(input("Input for customer address: "))
+    customer_phone = str(input("Input for customer phone number: "))
+    print_item("SELECT * FROM courier")
+    courier_id = int(input("Input the courier index to select courier: "))
+    status = "Preparing"
+    print_item("SELECT * FROM product")
+    item_str = str(input("Enter list of product index values (seperated with comma): "))
+    sql = ("INSERT INTO orders (customer_name, customer_address, customer_phone, courier_id, delivery_status, items) VALUES (%s,%s,%s,%s,%s,%s)")
+    val = (customer_name, customer_address, customer_phone, courier_id, status, item_str)
+    execute_query(sql, val)
+    
+def update_order_status():
+    orders_status = {0:"Preparing", 1:"Waiting for Pickup", 2:"Delivered"}
+    
+    print_item("SELECT * FROM orders")
+    input_id = int(input("Which order your want to update?: ")) 
+    print_dict(orders_status)
+    input_status = int(input("What is the new orders status?: "))
+    new_status = orders_status[input_status]
+    sql = ("UPDATE orders SET delivery_status = %s WHERE customer_id = %s")
+    val = (new_status, input_id)
+    execute_query(sql, val)
 
-def update_order_status(orders_list, status_list):
-    """
-    Update an order status
-    orders_list = orders_list
-    status_list = status_list
-    """
-    while True:
-        print_index(orders_list)
-        try:
-            new_order_index = int(input("Enter the index of the order to be updated: "))
-            if new_order_index > (len(orders_list)-1):
-                raise Exception
-        except Exception:
-            print("\nERROR: Please enter an valid action!\n")
-            continue
-                
-        print_index(status_list)
-        index_status = int(input("What is the new order status?: "))
-        orders_list[new_order_index]["status"] = status_list[index_status]
-        return
+def update_existing_orders():
+    orders_status = {0:"Preparing", 1:"Waiting for Pickup", 2:"Delivered"}
+    print_item("SELECT * FROM orders")
+    input_id = int(input("Which order your want to update?: "))
+    customer_name = str(input("Input for customer name: "))
+    customer_address = str(input("Input for customer address: "))
+    customer_phone = str(input("Input for customer phone number: "))
+    
+    print_item("SELECT * FROM courier")
+    courier_id = int(input("Input the courier index to select courier: "))
+    
+    print_dict(orders_status)
+    input_status = int(input("Input the courier index to select courier: "))
+    status = orders_status[input_status]
+    
+    print_item("SELECT * FROM product")
+    item_str = str(input("Enter list of product index values (seperated with comma): "))
+    
+    sql = ("UPDATE orders customer_name=%s, customer_address=%s, customer_phone=%s, courier_id=%s, delivery_status=%s, items=%s) WHERE customer_id = %s ")
+    val = (customer_name, customer_address, customer_phone, courier_id, status, item_str, input_id)
+    execute_query(sql, val)
 
-def update_existing_order(orders_list, status_list, prod_list, cour_list):
-    """
-    Update an existing order with new name
-    orders_list = orders_list
-    status_list = status_list
-    cour_list = cour_list 
-    """
-    while True:
-        print_index(orders_list)
-        try:
-            new_order_index = int(input("Enter the index of the order to be updated: "))
-            if new_order_index > (len(orders_list)-1):
-                raise Exception
-        except Exception:
-            print("\nERROR: Please enter an valid action!\n")
-            continue
-        
-        cus_name = str(input("Input for customer name: "))
-        if cus_name:
-            orders_list[new_order_index]["customer_name"] = cus_name
-            
-        cus_address = str(input("Input for customer address: "))
-        if cus_address:
-            orders_list[new_order_index]["customer_address"] = cus_address            
-            
-        cus_phone = str(input("Input for customer phone number: "))
-        if cus_phone:
-            orders_list[new_order_index][ "customer_phone"] = cus_phone
-            
-        print_index(prod_list)
-        item_index_string = str(input("Enter list of product index values (seperated with comma): "))
-        
-        print_index(cour_list)
-        cour_index = input("Input the courier index to select courier: ")
-        if cour_index:
-            orders_list[new_order_index]["courier"] = int(cour_index)
-            
-        print_index(status_list)
-        index_status = input("What is the new order status?: ")
-        if index_status:
-            orders_list[new_order_index]["status"] = status_list[int(index_status)] # Update status
-        
-        if item_index_string:
-            orders_list[new_order_index]["items"] = [index.strip() for index in item_index_string.split(",")]
-            
-        return orders_list
 
-def list_orders_by_key(orders_list, sort_by: str):
-    """
-    sort orders by keys in orders dict
-    sort_by: key (status/courier)
-    """
-    def myFunc(e):
-        return e[sort_by]
-    temp_list = list(orders_list)
-    temp_list.sort(key=myFunc)
-    for item in temp_list:
-        print(f"""
-Name: {item["customer_name"]}
-Address: {item["customer_address"]}
-Phone: {item["customer_phone"]}
-Courier: {item["courier"]}
-Status: {item["status"]}
-Item: {item["items"]}
-""")
+# def list_orders_by_key(orders_list, sort_by: str):
+#     """
+#     sort orders by keys in orders dict
+#     sort_by: key (status/courier)
+#     """
+#     def myFunc(e):
+#         return e[sort_by]
+#     temp_list = list(orders_list)
+#     temp_list.sort(key=myFunc)
+#     for item in temp_list:
+#         print(f"""
+# Name: {item["customer_name"]}
+# Address: {item["customer_address"]}
+# Phone: {item["customer_phone"]}
+# Courier: {item["courier"]}
+# Status: {item["status"]}
+# Item: {item["items"]}
+# """)
 
 
 def print_index(name):
     """Print item in list with index"""
     for index, item in enumerate(name):
         print(index, item)
+        
+def print_dict(name):
+    for key, value in name.items(): 
+        print(f"{key} {value}")
 
 def menu_input(max_menu_index):
     while True:
@@ -307,11 +260,8 @@ def menu_input(max_menu_index):
         return action
 
 def main():
-    # cour_list = load_csv_to_list_of_dict("data/courier.csv")
-    orders_list = load_csv_to_list_of_dict("data/orders.csv")
-    
     while True: #Main Menu Loop
-        main_menu(orders_list)
+        main_menu()
 
 if __name__ == "__main__":
     main()
