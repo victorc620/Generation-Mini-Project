@@ -2,11 +2,13 @@ from file_handler import execute_query
 
 class Item():
     
+    @staticmethod
     def print_index(name):
         """Print item in list with index"""
         for index, item in enumerate(name):
             print(index, item)
-            
+    
+    @staticmethod    
     def print_item(table_name):
         """Print out content from Database
         statment: MySQL statment"""
@@ -30,7 +32,7 @@ class Product(Item):
         execute_query(sql, val)
     
     def update_existing_product(self):
-        self.print_item(self.table_name)
+        Product.print_item(self.table_name)
         id_input = int(input("Enter the product's ID: "))
         name = str(input("Enter the new product name: "))
         price = float(input("Enter the new price: "))
