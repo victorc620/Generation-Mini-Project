@@ -19,6 +19,15 @@ class Item():
             for key,values in element.items():
                 print(f"{key}: {values}")
         return lists
+    
+    def print_with_sequence(self, table_name, column):
+        sql = f"SELECT * FROM {table_name} ORDER BY {column} DESC"
+        lists = execute_query(sql)
+        for element in lists:
+            print("")
+            for key,values in element.items():
+                print(f"{key}: {values}")
+
 
 class Product(Item):
     
@@ -64,8 +73,8 @@ class Courier(Item):
         super().print_item(self.table_name)
         id_input = int(input("Enter the courier's ID: "))
         name = str(input("Enter the new courier name: "))
-        phone = int(input("Enter the new phone number: "))
-        sql = "UPDATE product SET name = %s, phone = %s WHERE id = %s"
+        phone = str(input("Enter the new phone number: "))
+        sql = "UPDATE courier SET name = %s, phone = %s WHERE id = %s"
         val = (name, phone, id_input)
         execute_query(sql, val)
     
@@ -86,11 +95,11 @@ class Order(Item):
         customer_address = str(input("Input for customer address: "))
         customer_phone = str(input("Input for customer phone number: "))
         
-        super().print_item(Product.table_name)
+        super().print_item(Courier.table_name)
         courier_id = int(input("Input the courier index to select courier: "))
         status = "Preparing"
         
-        super().print_item(Courier.table_name)
+        super().print_item(Product.table_name)
         item_str = str(input("Enter list of product index values (seperated with comma): "))
         sql = ("INSERT INTO orders (customer_name, customer_address, customer_phone, courier_id, delivery_status, items) VALUES (%s,%s,%s,%s,%s,%s)")
         val = (customer_name, customer_address, customer_phone, courier_id, status, item_str)

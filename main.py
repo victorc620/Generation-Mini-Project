@@ -1,4 +1,3 @@
-from file_handler import execute_query
 from classes import Item, Product, Courier, Order
 
 def main_menu():
@@ -36,7 +35,7 @@ def product_menu():
 
     while True: #Product/Courier Menu Loop
         print(prod_menu)
-        action = menu_input(4)
+        action = menu_input(5)
         product = Product()
         
         if action == 0:
@@ -49,6 +48,8 @@ def product_menu():
             product.update_existing_product()
         elif action == 4:
             product.delete_product()
+        elif action ==5:
+            product.print_with_sequence(product.table_name, "id")
             
 def courier_menu():
 
@@ -65,17 +66,18 @@ def courier_menu():
     while True: #Product/Courier Menu Loop
         print(cour_menu)
         action = menu_input(4)
+        courier = Courier()
         
         if action == 0:
             return
         elif action == 1:
-            Courier.print_item(Courier.table_name)
+            courier.print_item(courier.table_name)
         elif action == 2:
-            Courier.create_new_courier()
+            courier.create_new_courier()
         elif action == 3:
-            Courier.update_existing_courier()
+            courier.update_existing_courier()
         elif action == 4:
-            Courier.delete_courier()
+            courier.delete_courier()
 
 def orders_menu():
     
@@ -95,23 +97,24 @@ def orders_menu():
     while True:
         print(order_menu)
         action = menu_input(7)
+        order = Order()
         
         if action == 0:
             return
         elif action == 1:
-            Order.print_item(Order.table_name)
+            order.print_item(order.table_name)
         elif action == 2:
-            Order.create_new_order()
+            order.create_new_order()
         elif action == 3:
-            Order.update_order_status()
+            order.update_order_status()
         elif action == 4:
-            Order.update_existing_orders()
+            order.update_existing_orders()
         elif action == 5:
-            Order.delete_orders()
-        # elif action == 6:
-        #     print_orders_by_sth("delivery_status")
-        # elif action == 7:
-        #     print_orders_by_sth("courier")
+            order.delete_orders()
+        elif action == 6:
+            order.print_with_sequence(order.table_name,"delivery_status")
+        elif action == 7:
+            order.print_with_sequence(order.table_name,"courier_id")
             
 def menu_input(max_menu_index):
     while True:
