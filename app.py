@@ -48,8 +48,8 @@ def product_menu():
             print_item("SELECT * FROM product")
         elif action == 2:
             create_new_product()
-        # elif action == 3:
-        #     update_existing_item(item_list, menu_name)
+        elif action == 3:
+            update_existing_product()
         # elif action == 4:
         #     delect_item(item_list, menu_name)
             
@@ -133,6 +133,7 @@ def print_item(statment):
         print("")
         for key,values in element.items():
             print(f"{key}: {values}")
+    return lists
 
 # def exit_program(prod_list, cour_list, orders_list):
 #     """
@@ -171,34 +172,42 @@ def print_item(statment):
 def create_new_product():
     name = input(f"Enter the product name: ")
     price = input(f"Enter the price name: ")
-    sql = "INSERT INTO product (name, price) VALUES (%s,%s)"
+    sql = "INSERT IGNORE INTO product (name, price) VALUES (%s,%s)"
     val = (name, price)
     execute_query(sql, val)
+    
+def update_existing_product():
+    products_list = print_item("SELECT * FROM product")
+    id_input = int(input("Enter the product's ID: "))
+    id_name
 
-def update_existing_item(item_list, list_name):
-    """
-    Update an existing product/courier with new name
-    item_list: prod_list/ cour_list
-    list_name: "product"/"courier"
-    """
-    while True:
-        print_index(item_list)
-        try:
-            new__index = int(input(f"Enter the index of the {list_name} to be updated: "))
-            if new__index > (len(item_list)-1):
-                raise Exception
-        except Exception:
-            print("\nERROR: Please enter an valid action!\n")
-            continue
+def delete_existing_product():
+    pass
+
+# def update_existing_item(item_list, list_name):
+#     """
+#     Update an existing product/courier with new name
+#     item_list: prod_list/ cour_list
+#     list_name: "product"/"courier"
+#     """
+#     while True:
+#         print_index(item_list)
+#         try:
+#             new__index = int(input(f"Enter the index of the {list_name} to be updated: "))
+#             if new__index > (len(item_list)-1):
+#                 raise Exception
+#         except Exception:
+#             print("\nERROR: Please enter an valid action!\n")
+#             continue
         
-        new_item_name = input(f"Enter the name of the new {list_name}: ")
-        item_list[new__index]["name"] = new_item_name
-        if list_name == "product":
-            item_list[new__index]["price"] = float(input(f"Enter the new price: "))
-        if list_name == "courier":
-            item_list[new__index]["phone"] = int(input(f"Enter the new phone: "))            
-        print(item_list)
-        return item_list
+#         new_item_name = input(f"Enter the name of the new {list_name}: ")
+#         item_list[new__index]["name"] = new_item_name
+#         if list_name == "product":
+#             item_list[new__index]["price"] = float(input(f"Enter the new price: "))
+#         if list_name == "courier":
+#             item_list[new__index]["phone"] = int(input(f"Enter the new phone: "))            
+#         print(item_list)
+#         return item_list
     
 def delect_item(item_list, list_name):
     """
