@@ -1,5 +1,5 @@
 from file_handler import execute_query
-from app_oop import Item, Product, Courier, Order
+from classes import Item, Product, Courier, Order
 
 def main_menu():
     main_menu = """
