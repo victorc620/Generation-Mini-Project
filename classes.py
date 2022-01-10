@@ -118,7 +118,7 @@ class Order(Item):
         execute_query(sql, val)
     
     def update_existing_orders(self):
-        orders_status = {0:"Preparing", 1:"Waiting for Pickup", 2:"Delivered"}
+        # orders_status = {0:"Preparing", 1:"Waiting for Pickup", 2:"Delivered"}
         super().print_item(self.table_name)
         input_id = int(input("Which order your want to update?: "))
         customer_name = str(input("Input for customer name: "))
@@ -128,9 +128,9 @@ class Order(Item):
         super().print_item(Courier.table_name)
         courier_id = int(input("Input the courier index to select courier: "))
         
-        self.print_dict(orders_status)
+        self.print_dict(self.orders_status)
         input_status = int(input("Input the courier index to select courier: "))
-        status = orders_status[input_status]
+        status = self.orders_status[input_status]
         
         super().print_item(Product.table_name)
         item_str = str(input("Enter list of product index values (seperated with comma): "))
