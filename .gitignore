@@ -156,3 +156,4 @@ cython_debug/
 backup/
 weekly_goal/
 .DS_Store
+old_test_app.py
