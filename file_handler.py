@@ -12,12 +12,15 @@ database = os.environ.get("mysql_db")
 
 # Establish a database connection
 def execute_query(statement, val = None, host=host,user=user,password=password,database=database):
-    connection = pymysql.connect(host=host,user=user,password=password,database=database, autocommit=True)
-    cursor = connection.cursor(pymysql.cursors.DictCursor)
-    cursor.execute(statement, val)
-    rows = cursor.fetchall()
-    connection.commit()
-    cursor.close()
-    connection.close()
-    return rows
+    try:
+        connection = pymysql.connect(host=host,user=user,password=password,database=database, autocommit=True)
+        cursor = connection.cursor(pymysql.cursors.DictCursor)
+        cursor.execute(statement, val)
+        rows = cursor.fetchall()
+        connection.commit()
+        cursor.close()
+        connection.close()
+        return rows
+    except Exception as e:
+        print(e)
 

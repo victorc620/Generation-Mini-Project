@@ -10,8 +10,7 @@ class Item():
     
     @staticmethod    
     def print_item(table_name):
-        """Print out content from Database
-        statment: MySQL statment"""
+        """Print out content from Database"""
         sql = f"SELECT * FROM {table_name}"
         lists = execute_query(sql)
         for element in lists:
@@ -20,7 +19,8 @@ class Item():
                 print(f"{key}: {values}")
         return lists
     
-    def print_with_sequence(self, table_name, column):
+    @staticmethod
+    def print_with_sequence(table_name, column):
         sql = f"SELECT * FROM {table_name} ORDER BY {column} DESC"
         lists = execute_query(sql)
         for element in lists:
@@ -28,6 +28,14 @@ class Item():
             for key,values in element.items():
                 print(f"{key}: {values}")
 
+# class Error_catching():
+    
+#     @staticmethod
+#     def foreign_key_error(sql, val):
+#         try:
+#             execute_query(sql, val)
+#         except:
+            
 
 class Product(Item):
     
