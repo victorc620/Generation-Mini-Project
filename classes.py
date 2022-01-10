@@ -108,10 +108,12 @@ class Order(Item):
         status = "Preparing"
         
         super().print_item(Product.table_name)
-        item_str = str(input("Enter list of product index values (seperated with comma): "))
-        sql = ("INSERT INTO orders (customer_name, customer_address, customer_phone, courier_id, delivery_status, items) VALUES (%s,%s,%s,%s,%s,%s)")
-        val = (customer_name, customer_address, customer_phone, courier_id, status, item_str)
-        execute_query(sql, val)
+        product_str = str(input("Enter list of product index values (seperated with comma): "))
+        product_str_list = product_str.split(",")
+        for product in product_str_list:
+            sql = ("INSERT INTO orders (customer_name, customer_address, customer_phone, courier_id, delivery_status, items) VALUES (%s,%s,%s,%s,%s,%s)")
+            val = (customer_name, customer_address, customer_phone, courier_id, status, product)
+            execute_query(sql, val)
     
     def update_order_status(self):
         
