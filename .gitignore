@@ -157,3 +157,4 @@ backup/
 weekly_goal/
 .DS_Store
 old_test_app.py
+test_classes.py
