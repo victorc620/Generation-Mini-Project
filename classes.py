@@ -28,15 +28,6 @@ class Item():
             for key,values in element.items():
                 print(f"{key}: {values}")
 
-# class Error_catching():
-    
-#     @staticmethod
-#     def foreign_key_error(sql, val):
-#         try:
-#             execute_query(sql, val)
-#         except:
-            
-
 class Product(Item):
     
     table_name = "product"
