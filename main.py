@@ -1,4 +1,4 @@
-from classes import Item, Product, Courier, Order
+from classes import Error_handling, Item, Product, Courier, Order
 
 def main_menu():
     main_menu = """
@@ -10,7 +10,7 @@ def main_menu():
 3. Enter order menu
 """
     print(main_menu)        
-    action = menu_input(3)
+    action = Error_handling.menu_input(3)
     
     if action == 0:
         exit()
@@ -35,7 +35,7 @@ def product_menu():
 
     while True: #Product/Courier Menu Loop
         print(prod_menu)
-        action = menu_input(5)
+        action = Error_handling.menu_input(5)
         product = Product()
         
         if action == 0:
@@ -48,8 +48,6 @@ def product_menu():
             product.update_existing_product()
         elif action == 4:
             product.delete_product()
-        elif action ==5:
-            product.print_with_sequence(product.table_name, "id")
             
 def courier_menu():
 
@@ -65,7 +63,7 @@ def courier_menu():
 
     while True: #Product/Courier Menu Loop
         print(cour_menu)
-        action = menu_input(4)
+        action = Error_handling.menu_input(4)
         courier = Courier()
         
         if action == 0:
@@ -96,7 +94,7 @@ def orders_menu():
 
     while True:
         print(order_menu)
-        action = menu_input(7)
+        action = Error_handling.menu_input(7)
         order = Order()
         
         if action == 0:
@@ -115,17 +113,6 @@ def orders_menu():
             order.print_with_sequence(order.table_name,"delivery_status")
         elif action == 7:
             order.print_with_sequence(order.table_name,"courier_id")
-            
-def menu_input(max_menu_index):
-    while True:
-        try:
-            action = int(input("Enter your action: "))
-            if action>max_menu_index:
-                raise Exception
-        except Exception:
-            print("\nERROR: Please enter an valid action")
-            continue
-        return action
 
 def main():
     while True: #Main Menu Loop

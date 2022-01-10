@@ -150,3 +150,17 @@ class Order(Item):
     def print_dict(name):
         for key, value in name.items(): 
             print(f"{key} {value}")
+
+class Error_handling():
+    
+    @staticmethod
+    def menu_input(max_menu_index):
+        while True:
+            try:
+                action = int(input("Enter your action: "))
+                if action>max_menu_index:
+                    raise Exception
+            except Exception:
+                print("\nERROR: Please enter an valid action")
+                continue
+            return action
