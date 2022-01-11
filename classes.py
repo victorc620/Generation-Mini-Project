@@ -170,6 +170,7 @@ class Order(Item):
     def print_dict(name):
         for key, value in name.items(): 
             print(f"{key} {value}")
+        print("")
 
 class Error_handling():
     

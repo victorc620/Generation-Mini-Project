@@ -13,6 +13,7 @@ def main_menu():
     action = Error_handling.menu_input(3)
     
     if action == 0:
+        print("Thanks for using this program, see ya!\n")
         exit()
     elif action == 1:
         product_menu()
