@@ -45,14 +45,18 @@ class Product(Item):
         super().print_item(self.table_name)
         id_input = int(input("Enter the product's ID: "))
         name = str(input("Enter the new product name: "))
-        price = float(input("Enter the new price: "))
         if name:
-            sql = "UPDATE product SET name = %s, price = %s WHERE id = %s"
-            val = (name, price, id_input)
-        else:
+            sql = "UPDATE product SET name = %s WHERE id = %s"
+            val = (name, id_input)
+            execute_query(sql, val)
+        try:
+            price = float(input("Enter the new price: "))
             sql = "UPDATE product SET price = %s WHERE id = %s"
             val = (price, id_input)
-        execute_query(sql, val)
+            execute_query(sql, val)
+        except ValueError:
+            pass
+            
     
     def delete_product(self):
         super().print_item(self.table_name)
@@ -77,10 +81,16 @@ class Courier(Item):
         super().print_item(self.table_name)
         id_input = int(input("Enter the courier's ID: "))
         name = str(input("Enter the new courier name: "))
+        if name:
+            sql = "UPDATE courier SET name = %s WHERE id = %s"
+            val = (name, id_input)
+            execute_query(sql, val)
+        
         phone = str(input("Enter the new phone number: "))
-        sql = "UPDATE courier SET name = %s, phone = %s WHERE id = %s"
-        val = (name, phone, id_input)
-        execute_query(sql, val)
+        if phone:
+            sql = "UPDATE courier SET phone = %s WHERE id = %s"
+            val = (phone, id_input)
+            execute_query(sql, val)
     
     def delete_courier(self):
         super().print_item(self.table_name)
