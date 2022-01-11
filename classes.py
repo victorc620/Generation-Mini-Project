@@ -17,6 +17,7 @@ class Item():
             print("")
             for key,values in element.items():
                 print(f"{key}: {values}")
+        print("")
         return lists
     
     @staticmethod
@@ -45,8 +46,12 @@ class Product(Item):
         id_input = int(input("Enter the product's ID: "))
         name = str(input("Enter the new product name: "))
         price = float(input("Enter the new price: "))
-        sql = "UPDATE product SET name = %s, price = %s WHERE id = %s"
-        val = (name, price, id_input)
+        if name:
+            sql = "UPDATE product SET name = %s, price = %s WHERE id = %s"
+            val = (name, price, id_input)
+        else:
+            sql = "UPDATE product SET price = %s WHERE id = %s"
+            val = (price, id_input)
         execute_query(sql, val)
     
     def delete_product(self):
