@@ -92,7 +92,7 @@ class Courier(Item):
 class Order(Item):
     
     table_name = "orders"
-    orders_status = {0:"Preparing", 1:"Waiting for Pickup", 2:"Delivered"}
+    orders_status = {"0":"Preparing", "1":"Waiting for Pickup", "2":"Delivered"}
     
     def create_new_order(self):
         customer_name = str(input("Input for customer name: "))
@@ -116,7 +116,7 @@ class Order(Item):
         super().print_item(self.table_name)
         input_id = int(input("Which order your want to update?: ")) 
         self.print_dict(self.orders_status)
-        input_status = int(input("What is the new orders status?: "))
+        input_status = input("What is the new orders status?: ")
         new_status = self.orders_status[input_status]
         sql = ("UPDATE orders SET delivery_status = %s WHERE customer_id = %s")
         val = (new_status, input_id)
@@ -127,22 +127,37 @@ class Order(Item):
         super().print_item(self.table_name)
         input_id = int(input("Which order your want to update?: "))
         customer_name = str(input("Input for customer name: "))
+        if customer_name:
+            execute_query("UPDATE orders SET customer_name=%s WHERE customer_id = %s", (customer_name, input_id))
+            
         customer_address = str(input("Input for customer address: "))
+        if customer_address:
+            execute_query("UPDATE orders SET customer_address=%s WHERE customer_id = %s", (customer_address, input_id))
+            
         customer_phone = str(input("Input for customer phone number: "))
-        
+        if customer_phone:
+            execute_query("UPDATE orders SET customer_phone=%s WHERE customer_id = %s", (customer_phone, input_id))
+            
         super().print_item(Courier.table_name)
-        courier_id = int(input("Input the courier index to select courier: "))
+        courier_id = str(input("Input the courier index to select courier: "))
+        if courier_id:
+            execute_query("UPDATE orders SET courier_id=%s WHERE customer_id = %s", (courier_id, input_id))
         
         self.print_dict(self.orders_status)
-        input_status = int(input("Input the courier index to select courier: "))
-        status = self.orders_status[input_status]
+        input_status = str(input("Input the courier index to select courier: "))
+        if input_status:
+            status = self.orders_status[input_status]
+            execute_query("UPDATE orders SET status=%s WHERE customer_id = %s", (status, input_id))           
         
         super().print_item(Product.table_name)
-        item_str = str(input("Enter list of product index values (seperated with comma): "))
-        
-        sql = ("UPDATE orders SET customer_name=%s, customer_address=%s, customer_phone=%s, courier_id=%s, delivery_status=%s, items=%s WHERE customer_id = %s")
-        val = (customer_name, customer_address, customer_phone, courier_id, status, item_str, input_id)
-        execute_query(sql, val)
+        item_str = str(input("Enter list of product index values: "))
+        while item_str:
+            if "," in item_str:
+                print("Please enter ONE product\n")
+                item_str = str(input("Enter list of product index values: "))
+            else:
+                execute_query("UPDATE orders SET items=%s WHERE customer_id = %s", (item_str, input_id))
+                break
     
     def delete_orders(self):
         super().print_item(self.table_name)
