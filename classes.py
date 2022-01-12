@@ -154,10 +154,10 @@ class Order(Item):
             execute_query("UPDATE orders SET courier_id=%s WHERE customer_id = %s", (courier_id, input_id))
         
         self.print_dict(self.orders_status)
-        input_status = str(input("Input the courier index to select courier: "))
+        input_status = str(input("Input the courier index to select status: "))
         if input_status:
             status = self.orders_status[input_status]
-            execute_query("UPDATE orders SET status=%s WHERE customer_id = %s", (status, input_id))           
+            execute_query("UPDATE orders SET delivery_status=%s WHERE customer_id = %s", (status, input_id))           
         
         super().print_item(Product.table_name)
         item_str = str(input("Enter list of product index values: "))
