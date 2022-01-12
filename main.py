@@ -36,7 +36,7 @@ def product_menu():
 
     while True: #Product/Courier Menu Loop
         print(prod_menu)
-        action = Error_handling.menu_input(5)
+        action = Error_handling.menu_input(4)
         product = Product()
         
         if action == 0:
