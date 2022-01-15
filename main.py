@@ -1,9 +1,10 @@
+
+   
 from classes import Error_handling, Item, Product, Courier, Order
 
 def main_menu():
     main_menu = """
 ------MAIN MENU------
-
 0. Exit the app
 1. Enter product menu
 2. Enter courier menu
@@ -26,7 +27,6 @@ def product_menu():
     
     prod_menu = """
 ------PRODUCT MENU------
-
 0. Return to main menu
 1. Print product list
 2. Create new product
@@ -54,7 +54,6 @@ def courier_menu():
 
     cour_menu = """
 ------COURIER MENU------
-
 0. Return to main menu
 1. Print courier list
 2. Create new courier
@@ -82,7 +81,6 @@ def orders_menu():
     
     order_menu = """
 ------ORDERS MENU------
-
 0. Return to main menu
 1. Print order list
 2. Create new order
