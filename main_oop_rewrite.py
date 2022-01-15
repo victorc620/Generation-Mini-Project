@@ -1,12 +1,8 @@
-from main import main_menu
-
+# from classes import Error_handling, Item, Product, Courier, Order
+from oop_classes_rewrite import Common_Function, Product, Courier, Orders
 
 class Menu:
-    
-    def __init__(self):
-        self.menu = ""
-        self.choices ={"0":"temp"}
-    
+        
     def run(self):
         '''Display the menu and respond to choices.'''
         while True:
@@ -16,7 +12,7 @@ class Menu:
             if action:
                 action()
             else:
-                print("{0} is not a valid choice".format(choice))
+                print(f"{choice} is not a valid choice")
 
     def display_menu(self):
         print(self.menu)
@@ -49,6 +45,7 @@ class Main_Menu(Menu):
 class Product_Menu(Menu):
     
     def __init__(self):
+        
         self.menu = """
 ------PRODUCT MENU------
 0. Return to main menu
@@ -57,14 +54,14 @@ class Product_Menu(Menu):
 3. Update existing product
 4. Delete product
 """
+        product = Product()
         self.choices = {
-        "0": self.return_to_main,
-        "1": self.test  
+        "0" : self.return_to_main,
+        "1" : product.print_product,
+        "2" : product.create_new_product,
+        "3" : product.update_existing_product,
+        "4" : product.delete_product
         }
-    
-    def test(self):
-        print("product menu test")
-
 
 class Courier_Menu(Menu):
     
@@ -77,14 +74,14 @@ class Courier_Menu(Menu):
 3. Update existing courier
 4. Delete courier 
 """
-        
+        courier = Courier()
         self.choices = {
-        "0":self.return_to_main,
-        "1":self.test
+        "0" : self.return_to_main,
+        "1" : courier.print_courier,
+        "2" : courier.create_new_courier,
+        "3" : courier.update_existing_courier,
+        "4" : courier.delete_courier
         }
-        
-    def test(self):
-        print("courier menu test")
 
 class Orders_Menu(Menu):
     
@@ -100,23 +97,15 @@ class Orders_Menu(Menu):
 6. List orders by status
 7. List orders by courier
 """
-
+        order = Orders()
         self.choices = {
         "0" : self.return_to_main,
+        "1" : order.print_order,
+        "2" : order.create_new_order,
+        "3" : order.update_order_status,
+        "4" : order.update_existing_orders,
+        "5" : order.delete_orders,
     }
-        
-    def test(self):
-        print("orders menu test")
-    pass
-
-class Product:
-    pass
-
-class Courier:
-    pass
-
-class Order:
-    pass
 
 def main():
     Main_Menu().run()
