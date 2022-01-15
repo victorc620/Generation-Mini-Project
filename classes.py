@@ -21,6 +21,15 @@ class Common_Function():
             print(f"{key} {value}")
         print("")
         
+    @staticmethod
+    def print_with_sequence(table_name, column, order_method):
+        sql = f"SELECT * FROM {table_name} ORDER BY {column} {order_method}"
+        lists = Database().execute_query(sql)
+        for element in lists:
+            print("")
+            for key,values in element.items():
+                print(f"{key}: {values}")
+        
 class Product(Common_Function):
     
     def __init__(self):
@@ -179,6 +188,12 @@ class Orders(Common_Function):
         sql = ("DELETE FROM orders WHERE customer_id = %s")
         val = (input_id)
         Database().execute_query(sql, val)
+        
+    def order_by_status(self):
+        self.print_with_sequence(self.table_name, "delivery_status", "DESC")
+        
+    def order_by_courier(self):
+        self.print_with_sequence(self.table_name, "courier_id", "ASC")
     
 class Database():
     

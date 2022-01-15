@@ -1,3 +1,4 @@
+import os
 from classes import Common_Function, Product, Courier, Orders
 
 class Menu:
@@ -7,6 +8,7 @@ class Menu:
         while True:
             self.display_menu()
             choice = input("Enter an option: ")
+            os.system("clear")
             action = self.choices.get(choice)
             if action:
                 action()
@@ -104,6 +106,8 @@ class Orders_Menu(Menu):
         "3" : order.update_order_status,
         "4" : order.update_existing_orders,
         "5" : order.delete_orders,
+        "6" : order.order_by_status,
+        "7" : order.order_by_courier
     }
 
 def main():
